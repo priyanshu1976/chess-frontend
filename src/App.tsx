@@ -4,44 +4,37 @@ import { Chessboard } from "react-chessboard";
 
 export default function PlayRandomMoveEngine() {
   const [game, setGame] = useState(new Chess());
+  const [fen, setfen] = useState(game.fen());
 
-  function makeAMove(
-    move: {
-      from: string;
-      to: string;
-    } | null
-  ) {
-    const gameCopy = { ...game };
-    const result = gameCopy.move(move);
-    setGame(gameCopy);
-    return result; // null if the move was illegal, the move object if the move was legal
-  }
-
-  function makeRandomMove() {
-    const possibleMoves = game.moves();
-    if (game.game_over() || game.in_draw() || possibleMoves.length === 0)
-      return; // exit if the game is over
-    const randomIndex = Math.floor(Math.random() * possibleMoves.length);
-    makeAMove(possibleMoves[randomIndex]);
+  function makeAMove(move: { from: string; to: string; promotion: string }) {
+    const gameCopy = game; // Ensure immutability
+    try {
+      const result = gameCopy.move(move);
+      setfen(result.after);
+      console.log(result);
+      if (result) setGame(gameCopy);
+      return result; // null if the move was illegal
+    } catch (error) {
+      console.error("Error in makeAMove:", error);
+    }
+    return null;
   }
 
   function onDrop(sourceSquare: string, targetSquare: string) {
-    const move: movetype = makeAMove({
+    console.log(sourceSquare, targetSquare);
+    const domove = {
       from: sourceSquare,
       to: targetSquare,
-    });
+      promotion: "q",
+    };
 
-    // illegal move
-    if (move === null) return false;
-    setTimeout(makeRandomMove, 200);
+    const move = makeAMove(domove);
+    if (!move) return false; // Illegal move
     return true;
   }
 
-  return <Chessboard position={game.fen()} onPieceDrop={onDrop} />;
-}
+  console.log(game.fen());
+  console.log(typeof game.fen());
 
-interface movetype {
-  from: string;
-  to: string;
-  promotion?: string;
+  return <Chessboard position={fen} onPieceDrop={onDrop} />;
 }
