@@ -1,7 +1,47 @@
-import React from "react";
+import { useState } from "react";
+import { Chess } from "chess.js";
+import { Chessboard } from "react-chessboard";
 
-function App() {
-  return <div>App</div>;
+export default function PlayRandomMoveEngine() {
+  const [game, setGame] = useState(new Chess());
+
+  function makeAMove(
+    move: {
+      from: string;
+      to: string;
+    } | null
+  ) {
+    const gameCopy = { ...game };
+    const result = gameCopy.move(move);
+    setGame(gameCopy);
+    return result; // null if the move was illegal, the move object if the move was legal
+  }
+
+  function makeRandomMove() {
+    const possibleMoves = game.moves();
+    if (game.game_over() || game.in_draw() || possibleMoves.length === 0)
+      return; // exit if the game is over
+    const randomIndex = Math.floor(Math.random() * possibleMoves.length);
+    makeAMove(possibleMoves[randomIndex]);
+  }
+
+  function onDrop(sourceSquare: string, targetSquare: string) {
+    const move: movetype = makeAMove({
+      from: sourceSquare,
+      to: targetSquare,
+    });
+
+    // illegal move
+    if (move === null) return false;
+    setTimeout(makeRandomMove, 200);
+    return true;
+  }
+
+  return <Chessboard position={game.fen()} onPieceDrop={onDrop} />;
 }
 
-export default App;
+interface movetype {
+  from: string;
+  to: string;
+  promotion?: string;
+}

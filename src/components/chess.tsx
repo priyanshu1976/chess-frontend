@@ -1,7 +1,9 @@
-import React from "react";
+import { Chessboard } from "react-chessboard";
 
-function chess() {
-  return <div>chess</div>;
+export default function chess() {
+  return (
+    <div>
+      <Chessboard id="BasicBoard" />
+    </div>
+  );
 }
-
-export default chess;
