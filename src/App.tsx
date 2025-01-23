@@ -1,40 +1,25 @@
-import { useState } from "react";
-import { Chess } from "chess.js";
-import { Chessboard } from "react-chessboard";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Chess from "./components/ChessBoard";
+import Signup from "./Signup";
+import Login from "./Login";
+import Landing from "./components/Landing";
+import Navbar from "./components/Navbar";
 
-export default function PlayRandomMoveEngine() {
-  const [game, setGame] = useState(new Chess());
-  const [fen, setfen] = useState(game.fen());
-
-  function makeAMove(move: { from: string; to: string; promotion: string }) {
-    const gameCopy = game; // Ensure immutability
-    try {
-      const result = gameCopy.move(move);
-      setfen(result.after);
-      console.log(result);
-      if (result) setGame(gameCopy);
-      return result; // null if the move was illegal
-    } catch (error) {
-      console.error("Error in makeAMove:", error);
-    }
-    return null;
-  }
-
-  function onDrop(sourceSquare: string, targetSquare: string) {
-    console.log(sourceSquare, targetSquare);
-    const domove = {
-      from: sourceSquare,
-      to: targetSquare,
-      promotion: "q",
-    };
-
-    const move = makeAMove(domove);
-    if (!move) return false; // Illegal move
-    return true;
-  }
-
-  console.log(game.fen());
-  console.log(typeof game.fen());
-
-  return <Chessboard position={fen} onPieceDrop={onDrop} />;
+function App() {
+  return (
+    <>
+      <Navbar />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Chess />} />
+          <Route path="/landing" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
 }
+
+export default App;
