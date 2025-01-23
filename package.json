@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/chess.js": "^0.13.7",
     "@types/ws": "^8.5.13",
+    "axios": "^1.7.9",
     "chess.js": "^1.0.0",
     "firebase": "^11.2.0",
     "lucide-react": "^0.473.0",

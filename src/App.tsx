@@ -1,21 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Chess from "./components/ChessBoard";
-import Signup from "./Signup";
-import Login from "./Login";
 import Landing from "./components/Landing";
-import Navbar from "./components/Navbar";
+import ChessRegistrationForm from "./components/Form";
+import Page from "./components/Page";
 
 function App() {
+  const [user, setuser] = useState([]);
   return (
     <>
-      <Navbar />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Chess />} />
-          <Route path="/landing" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/play" element={<Chess />} />
+          <Route path="/" element={<Landing setuser={setuser} />} />
+          <Route path="/profile" element={<Page user={user} />} />
+          <Route path="/form" element={<ChessRegistrationForm />} />
         </Routes>
       </BrowserRouter>
     </>
