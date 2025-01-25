@@ -4,9 +4,10 @@ import { Chessboard } from "react-chessboard";
 
 export default function Mychess() {
   const [game, setGame] = useState(new Chess());
-  const [fen, setFen] = useState(game.fen());
+  const [fen, setFen] = useState<string>(game.fen());
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [color, setcolor] = useState("white");
+  // const user = localStorage.getItem("user");
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
@@ -35,9 +36,11 @@ export default function Mychess() {
 
   function makeAMove(move: { from: string; to: string; promotion: string }) {
     const gameCopy = game; // Ensure immutability
+    console.log(game);
     try {
       const result = gameCopy.move(move);
       if (result) {
+        console.log(result.after);
         setFen(result.after);
       }
       socket?.send(
@@ -74,12 +77,17 @@ export default function Mychess() {
   }
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center ">
-      <Chessboard
-        position={fen}
-        onPieceDrop={onDrop}
-        boardOrientation={color}
-      />
+    <div className="flex flex-col justify-center items-center h-screen">
+      {/* <div>
+        <img src={user.user/} alt="" srcset="" />
+      </div> */}
+      <div className=" flex justify-center items-center w-[70vw] h-[70vh] ">
+        <Chessboard
+          position={fen}
+          onPieceDrop={onDrop}
+          boardOrientation={color}
+        />
+      </div>
     </div>
   );
 }

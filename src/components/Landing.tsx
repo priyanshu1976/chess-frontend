@@ -4,15 +4,12 @@ import { googleprovider } from "../../firebase.config";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 
-interface LandingProps {
-  setuser: (user: any) => void;
-}
-function Landing({ setuser }: LandingProps) {
+function Landing() {
   const navigate = useNavigate();
   async function Google() {
-      const user = await signInWithPopup(auth, googleprovider);
-      localStorage.setItem("user", JSON.stringify(user));
-      navigate("/profile");
+    const user = await signInWithPopup(auth, googleprovider);
+    localStorage.setItem("user", JSON.stringify(user));
+    navigate("/profile");
   }
   return (
     <>
