@@ -1,5 +1,22 @@
+import { useNavigate } from "react-router-dom";
+
+function generateRandomString(): string {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < 8; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
 function Page() {
   const user = JSON.parse(localStorage.getItem("user") || "");
+  const navigate = useNavigate();
+  function statrandomGame() {
+    navigate(`/private`);
+  }
+
   console.log(user);
   return (
     <div>
@@ -203,10 +220,16 @@ function Page() {
                 Create private games and invite your friends for a match.
               </p>
               <div className="space-y-4">
-                <button className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition duration-300">
+                <button
+                  className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition duration-300"
+                  onClick={statrandomGame}
+                >
                   Create Private Game
                 </button>
-                <button className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition duration-300">
+                <button
+                  className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition duration-300"
+                  onClick={statrandomGame}
+                >
                   Join Friend's Game
                 </button>
               </div>
